@@ -87,3 +87,140 @@ To start `redis-cli` and look at the keys please run
 ```
 npm run redis-cli
 ```
+
+## find the ip address inside the docker container for redis
+
+```
+docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' redis
+```
+
+## View processes and what ports they are using via ss -ltnp
+
+```
+ss -ltnp
+```
+
+Output
+
+```
+State                        Recv-Q                       Send-Q            Local Address:Port         Peer Address:Port                       Process           
+LISTEN                       0                            511                   127.0.0.1:44335             0.0.0.0:*                           users:(("node",pid=80321,fd=18))                       
+LISTEN                       0                            4096                    0.0.0.0:111               0.0.0.0:*      
+LISTEN                       0                            4096              127.0.0.53%lo:53                0.0.0.0:*      
+LISTEN                       0                            128                     0.0.0.0:22                0.0.0.0:*      
+LISTEN                       0                            5                     127.0.0.1:631               0.0.0.0:*      
+LISTEN                       0                            4096                       [::]:111                  [::]:*      
+LISTEN                       0                            128                        [::]:22                   [::]:*      
+LISTEN                       0                            2            [::ffff:127.0.0.1]:3350                    *:*      
+LISTEN                       0                            2                             *:3389                    *:*    
+```
+
+## List Processes, Ports and PID
+
+```
+sudo netstat -nlp 
+```
+
+```
+sudo lsof -n -P -i +c 13
+```
+
+## Tail the logs for a particular container in Docker
+
+To tail the logs for a particular container in Docker, you can use the docker logs command with the -f option. The -f option enables you to follow the log output in real-time.
+
+Here's the command to tail the logs for a container named my_container:
+
+```
+docker logs -f my_container
+```
+
+You can replace my_container with the actual name of your container. If you don't know the name of the container, you can use the docker ps command to list all running containers and their names.
+
+If you want to see only the last n lines of the logs, you can use the -n option. For example, to see the last 50 lines of logs for my_container, you can run:
+
+```
+docker logs -f --tail 50 my_container
+```
+
+## This will show you the last 50 lines of logs and continue to tail the logs in real-time.
+
+To print all key-value pairs in the Redis database, you can use the following steps:
+
+### Use the SCAN command to iterate over all the keys in the database:
+
+```
+SCAN 0
+```
+
+The SCAN command returns a cursor value and an array of keys. Use the cursor value returned by the previous command as the argument to the next SCAN command to continue iterating over the keys:
+
+```
+SCAN <cursor-value>
+```
+
+For each key returned by the SCAN command, use the GET command to retrieve its value:
+
+```
+GET <key>
+```
+
+Putting it all together, you can use the following Redis command-line interface command to print all key-value pairs:
+
+```
+SCAN 0 | awk '{print $1}' | while read key; do echo "$key: $(redis-cli get $key)"; done
+```
+
+This command will iterate over all the keys in the Redis database, retrieve the value of each key using the GET command, and print the key-value pair in the format key: value.
+
+## Redis port is changed to 7001 rather than 6379
+
+```
+docker-compose.yml
+provisioning/datasources/redis.yaml
+```
+
+## view docker logs
+
+```
+docker logs redis
+```
+
+## Requirements
+
+
+.env 
+- REDIS_PASSWORD=your_redis_password
+- REDIS_USERNAME=your_redis_username
+- REDIS_PORT=6380
+
+
+Grafana
+- provision data source
+- provision dashboard
+- use redis new port number, password
+
+pop-up-store-app
+- add console logging to gears scripts
+- RedisHost = 
+- REDIS_PORT 
+- REDIS_PASSWORD 
+
+Redis
+- internal port 6379
+- external port 6380 REDIS_PORT
+- REDIS_PASSWORD
+
+RedisInsight
+- port 8001
+- preset the data source
+- RedisHost = 
+- REDIS_PORT 
+- REDIS_PASSWORD
+
+RedisInsight UI
+- host = redis
+- port = REDIS_PORT
+- name = redis
+- password = REDIS_PASSWORD
+
