@@ -11,8 +11,10 @@
     "docker:build": "docker-compose build",
     "redis-cli": "docker exec -it redis redis-cli",
     "simulation": "npm i; node src/pop-up-store.js",
-    "start": "docker-compose pull && docker-compose up",
+    "start": "docker-compose pull && docker-compose up --remove-orphans",
     "stop": "docker-compose down",
+    "deploy": "git add . && git commit -m Build && git push",
+    "clean": "bash ./purge-all.sh",    
     "upgrade": "yarn upgrade --latest"
   },
   "version": "2.1.0"
