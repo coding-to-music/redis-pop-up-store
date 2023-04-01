@@ -8,6 +8,15 @@ const Redis = require("ioredis");
 /**
  * You can also specify connection options as a redis:// URL or rediss:// URL when using TLS encryption:
  */
+// const redis = new Redis(getRedisURI());
+
+const redisPassword = 'your_redis_password_here';
+function getRedisURI() {
+  const redisHost = 'redis'; // assuming Redis is running in a Docker container named "redis"
+  const redisPort = 6379;
+  return `redis://:${redisPassword}@${redisHost}:${redisPort}`;
+}
+
 const redis = new Redis(getRedisURI());
 
 /**

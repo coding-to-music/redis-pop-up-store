@@ -12,10 +12,12 @@ services:
     image: redislabs/redismod
     ports:
       - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=your_password_here
 
   grafana:
     container_name: grafana
-    image: ghcr.io/redisgrafana/redis-app:latest
+    image: grafana/grafana:latest
     ports:
       - "3000:3000"
     environment:
@@ -23,6 +25,8 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_BASIC_ENABLED=false
       - GF_ENABLE_GZIP=true
-      - GF_USERS_DEFAULT_THEME=light
+      - GF_USERS_DEFAULT_THEME=dark
     volumes:
       - ./provisioning:/etc/grafana/provisioning
+
+    # image: ghcr.io/redisgrafana/redis-app:latest

@@ -224,3 +224,16 @@ RedisInsight UI
 - name = redis
 - password = REDIS_PASSWORD
 
+## Set a password for Redis
+
+Replace your_password_here with a strong password of your choice.
+
+To modify the app and Grafana to use the Redis password, you would need to update the connection string in your code or configuration files to include the password. For example, in your app's configuration file, you might update the Redis URL to `redis://:your_password_here@redis:6379`
+
+To verify that Redis is using the password, you can use the Redis CLI to connect to the Redis container and execute some commands. Here's an example:
+
+- Open a new terminal window.
+- Run `docker exec -it redis redis-cli` to open a Redis CLI session in the Redis container.
+- Run `AUTH your_password_here` to authenticate with the Redis password.
+
+If the authentication is successful, Redis will respond with "OK". You can now execute Redis commands as usual. For example, you can run SET foo bar to set a key-value pair, and GET foo to retrieve the value of the "foo" key.
